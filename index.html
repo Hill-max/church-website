@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="login-container">
+    <h1>Welcome to the Church Website</h1>
+    
+    <!-- Phone Number & Password Setup Form -->
+    <div id="phone-password-form">
+        <p>Please enter your phone number to proceed:</p>
+        <input type="text" id="phone-number" placeholder="Enter phone number">
+        <button onclick="verifyPhoneNumber()">Next</button>
+    </div>
+
+    <!-- Password Entry Form -->
+    <div id="password-form" style="display:none;">
+        <p id="password-instruction">Please enter the password:</p>
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="submitPassword()">Submit</button>
+        <p id="error-message" style="display:none;"></p>
+        <p id="success-message" class="success-message" style="display:none;">Welcome! You are now logged in.</p>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

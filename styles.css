@@ -1,0 +1,122 @@
+/* Basic Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('bot.jpg'); /* Set the background image */
+    background-size: cover; /* Ensure the image covers the whole screen */
+    background-position: center; /* Center the image */
+    background-attachment: fixed; /* Make the background fixed while scrolling */
+    position: relative; /* Positioning context for the overlay */
+}
+
+/* Adding the semi-transparent overlay */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7); /* Whitish overlay with 70% opacity */
+    z-index: 1; /* Position the overlay above the background but below the content */
+}
+
+/* Login Container */
+.login-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for the login container */
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    z-index: 2; /* Ensure the login container is above the overlay */
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Input and Button Styles */
+input {
+    width: 80%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    background-color: #f8f8f8;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background-color: #ffffff;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 85%;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:active {
+    background-color: #388e3c;
+}
+
+/* Hide/Show Form Styles */
+#phone-password-form,
+#password-form {
+    display: none;
+}
+
+/* Error and Success Message Styles */
+#error-message {
+    color: #f44336;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.success-message {
+    color: #4CAF50;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* Media Queries for Responsiveness */
+@media only screen and (max-width: 600px) {
+    .login-container {
+        padding: 30px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .login-container {
+        padding: 20px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    input, button {
+        width: 100%;
+    }
+}
