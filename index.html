@@ -4,30 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Church Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<div class="login-container">
-    <h1>Welcome to the Church Website</h1>
-    
-    <!-- Phone Number & Password Setup Form -->
-    <div id="phone-password-form">
-        <p>Please enter your phone number to proceed:</p>
-        <input type="text" id="phone-number" placeholder="Enter phone number">
-        <button onclick="verifyPhoneNumber()">Next</button>
+    <!-- Master Password Page -->
+    <div id="login-container">
+        <h1 class="title">Hilltop Christian Church</h1>
+        <p class="subtitle">Enter Master Password to Access</p>
+        <input type="password" id="master-password" class="input" placeholder="Enter Master Password" />
+        <button class="btn" onclick="verifyMasterPassword()">Login</button>
+        <p id="error-message" class="error-message"></p>
     </div>
 
-    <!-- Password Entry Form -->
-    <div id="password-form" style="display:none;">
-        <p id="password-instruction">Please enter the password:</p>
-        <input type="password" id="password" placeholder="Enter password">
-        <button onclick="submitPassword()">Submit</button>
-        <p id="error-message" style="display:none;"></p>
-        <p id="success-message" class="success-message" style="display:none;">Welcome! You are now logged in.</p>
-    </div>
-</div>
+    <!-- Main Page After Login -->
+    <div id="main-page" style="display:none;">
+        <div class="header">
+            <h2>Welcome to the Admin Panel</h2>
+            <button class="btn" onclick="showAddUserForm()">Add New User</button>
+        </div>
+        
+        <!-- Master User Section -->
+        <div id="master-section" class="section">
+            <h3>Master User Section</h3>
+            <button class="btn" onclick="verifyMasterPhone()">Verify Master Phone</button>
+            <p id="master-error-message" class="error-message"></p>
+        </div>
 
-<script src="script.js"></script>
+        <!-- Ordinary User Section -->
+        <div id="user-section" class="section">
+            <h3>Ordinary Users</h3>
+            <div id="user-list"></div>
+        </div>
+
+        <!-- Add New User Form -->
+        <form id="add-user-form" class="form" style="display:none;">
+            <input type="text" id="user-name" class="input" placeholder="Enter your name" />
+            <input type="password" id="user-password" class="input" placeholder="Set a one-time password" />
+            <button type="button" class="btn" onclick="addNewUser()">Add User</button>
+            <p id="user-error-message" class="error-message"></p>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

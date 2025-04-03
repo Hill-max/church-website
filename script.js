@@ -1,101 +1,85 @@
-let correctPhoneNumber = "08033397359"; // Predefined phone number
-let correctPassword = ""; // Variable to store password set by the master user
-let isMasterUserSet = false; // Flag to check if master user has set the password
+// Verify the master password
+function verifyMasterPassword() {
+    const password = document.getElementById('master-password').value;
 
-// Function to check if phone number is already saved in session
-function checkIfPhoneNumberExists() {
-    fetch('server/checkPhoneNumber.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.phoneNumber) {
-                // If phone number exists, show the password form
-                document.getElementById('phone-password-form').style.display = "none";
-                checkIfPasswordExists(); // Check if master password is set
-            } else {
-                // If no phone number is saved, prompt the user for one
-                document.getElementById('phone-password-form').style.display = "block";
-                document.getElementById('password-form').style.display = "none";
-            }
-        });
+    fetch('https://your-render-url/api/auth/verify-master', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Master password verified') {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('main-page').style.display = 'block';
+        } else {
+            document.getElementById('error-message').textContent = 'Incorrect password. Please try again.';
+        }
+    });
 }
 
-// Function to check if the master password is set in session
-function checkIfPasswordExists() {
-    fetch('server/checkPassword.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.passwordSet) {
-                // If the password is set, show the password form
-                document.getElementById('password-form').style.display = "block";
-            } else {
-                // If the password is not set, allow the user to set it
-                document.getElementById('password-form').style.display = "none";
-                document.getElementById('password-instruction').innerText = "You are the first user. Please set the password.";
-            }
-        });
+// Add user form toggle
+function showAddUserForm() {
+    document.getElementById('add-user-form').style.display = 'block';
 }
 
-// Call checkIfPhoneNumberExists when the page loads
-window.onload = checkIfPhoneNumberExists;
+// Add a new user
+function addNewUser() {
+    const userName = document.getElementById('user-name').value;
+    const userPassword = document.getElementById('user-password').value;
 
-function verifyPhoneNumber() {
-    const phoneNumber = document.getElementById('phone-number').value;
-    if (phoneNumber === correctPhoneNumber) {
-        // Store phone number in session
-        fetch('server/savePhoneNumber.php', {
-            method: 'POST',
-            body: JSON.stringify({ phoneNumber }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(() => {
-            document.getElementById('phone-password-form').style.display = "none";
-            checkIfPasswordExists(); // After phone number, check password
-        });
-    } else {
-        showErrorMessage("Phone number doesn't match the required number.");
-    }
+    fetch('https://your-render-url/api/auth/add-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: userName, password: userPassword })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'User added successfully') {
+            const userList = document.getElementById('user-list');
+            const userButton = document.createElement('button');
+            userButton.textContent = userName;
+            userButton.onclick = function() {
+                promptForUserPassword(userName);
+            };
+            userList.appendChild(userButton);
+            document.getElementById('user-name').value = '';
+            document.getElementById('user-password').value = '';
+        } else {
+            document.getElementById('user-error-message').textContent = 'Error adding user. Please try again.';
+        }
+    });
 }
 
-function submitPassword() {
-    const password = document.getElementById('password').value;
-
-    // Check if the master password is already set
-    fetch('server/checkPassword.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.passwordSet) {
-                if (password === data.password) {
-                    showSuccessMessage("Welcome! You are now logged in.");
-                } else {
-                    showErrorMessage("Incorrect password. Please try again.");
-                }
-            } else {
-                // If the password is not set, set the master password
-                fetch('server/savePassword.php', {
-                    method: 'POST',
-                    body: JSON.stringify({ password }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(() => {
-                    showSuccessMessage("Password set successfully. You are now the master user!");
-                    document.getElementById('password-form').style.display = "none";
-                });
-            }
-        });
+// Verify user password and grant access
+function promptForUserPassword(userName) {
+    const password = prompt(`Enter password for ${userName}`);
+    
+    fetch('https://your-render-url/api/auth/verify-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: userName, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Password verified, access granted') {
+            alert(`Welcome ${userName}`);
+            showUserForm(userName);
+        } else {
+            alert('Incorrect password.');
+        }
+    });
 }
 
-function showErrorMessage(message) {
-    const errorElement = document.getElementById('error-message');
-    errorElement.innerText = message;
-    errorElement.style.display = "block";
-    document.getElementById('success-message').style.display = "none";
-}
-
-function showSuccessMessage(message) {
-    const successElement = document.getElementById('success-message');
-    successElement.innerText = message;
-    successElement.style.display = "block";
-    document.getElementById('error-message').style.display = "none";
+// Show user-specific form (name, phone, etc.)
+function showUserForm(userName) {
+    const userForm = document.createElement('form');
+    userForm.innerHTML = `
+        <input type="text" placeholder="Name" />
+        <input type="text" placeholder="Phone Number" />
+        <input type="text" placeholder="Gender" />
+        <input type="text" placeholder="Address (Optional)" />
+        <button type="submit">Submit</button>
+    `;
+    document.body.appendChild(userForm);
 }
